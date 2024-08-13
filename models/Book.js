@@ -15,13 +15,24 @@ const Bookschema = new mongoose.Schema(
             required: true,
             ref: "Author",
         },
+        Category: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Category",
+        },
         description: {
             type: String,
             required: true,
             trim: true,
         },
-        price: { type: Number, required: true, min: 0 },
+        rating: {
+            type: Number,
+            required: true,
+        },
 
+        reviews: [{ type: String, ref: "reviews" }],
+        price: { type: Number, required: true, min: 0 },
+        image: { type: String, default: "default-image.png" },
     },
     { timeStamps: true }
 );
@@ -36,6 +47,10 @@ function validateBook(obj) {
         author: Joi.string().required(),
         description: Joi.string().trim().min(5).required(),
         price: Joi.number().min(0).required(),
+        category: Joi.string().required(),
+        image: Joi.string(),
+        reviews: Joi.string(),
+        rating: Joi.number().required(),
 
     });
 
@@ -48,6 +63,10 @@ function validateUpdateBook(obj) {
         author: Joi.string(),
         description: Joi.string().trim().min(5),
         price: Joi.number().min(0),
+        category: Joi.string(),
+        image: Joi.string(),
+        reviews: Joi.string(),
+        rating: Joi.number()
     });
 
     return schema.validate(obj);
@@ -57,5 +76,5 @@ function validateUpdateBook(obj) {
 module.exports = {
     Book,
     validateBook,
-    validateUpdateBook
-}; 
+    validateUpdateBook,
+};

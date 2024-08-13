@@ -14,11 +14,17 @@ const { Book, validateBook, validateUpdateBook } = require("../models/Book");
 router.get(
     "/",
     asyncHandler(async (req, res) => {
+        const { pageNumber } = req.query;
+        const authorsPerPage = 10;
+
         const books = await Book.find().populate("author", [
             "_id",
             "firstName",
             "lastName",
-        ]);
+        ])
+            .skip((pageNumber - 1) * authorsPerPage)
+            .limit(authorsPerPage);;
+
         res.status(200).json(books);
     })
 );
@@ -61,6 +67,10 @@ router.post(
             author: req.body.author,
             description: req.body.description,
             price: req.body.price,
+            rating: req.body.rating,
+            Category: req.body.category,
+            image: req.body.image,
+            reviews: req.body.reviews
         });
 
         const result = await book.save();
@@ -89,6 +99,10 @@ router.put(
                     author: req.body.author,
                     description: req.body.description,
                     price: req.body.price,
+                    rating: req.body.rating,
+                    Category: req.body.category,
+                    image: req.body.image,
+                    reviews: req.body.reviews
                 },
             },
             { new: true }

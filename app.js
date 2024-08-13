@@ -1,15 +1,8 @@
 const express = require("express");
-const booksPath = require("./routers/books");
-const authorsPath = require("./routers/authors");
-const authPath = require("./routers/auth");
-const categoriesPath = require("./routers/categories");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config();
+const connectToDb = require("./config/db");
 //connect to db
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("connected to db"))
-    .catch((err) => console.log("error connecting to db", err));
+connectToDb();
 
 //init app
 const app = express();
@@ -18,10 +11,10 @@ const app = express();
 app.use(express.json());
 
 //Routers
-app.use("/api/books", booksPath);
-app.use("/api/authors", authorsPath);
-app.use("/api/categories", categoriesPath);
-app.use("/api/auth", authPath);
+app.use("/api/books", require("./routers/books"));
+app.use("/api/authors", require("./routers/authors"));
+app.use("/api/categories", require("./routers/categories"));
+app.use("/api/auth", require("./routers/auth"));
 
 
 
