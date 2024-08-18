@@ -3,6 +3,10 @@ const Joi = require("joi");
 
 const Bookschema = new mongoose.Schema(
     {
+        _id: {
+            type: String,
+            required: true
+        },
         title: {
             type: String,
             required: true,

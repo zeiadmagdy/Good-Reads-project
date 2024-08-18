@@ -26,6 +26,7 @@ mongoose.connect("mongodb://localhost/bookStoreDB")
 
 
         const books = Array.from({ length: 30 }).map(() => ({
+            
             title: faker.commerce.productName(),
             author: faker.helpers.arrayElement(insertedAuthors)._id,
             Category: faker.helpers.arrayElement(insertedCategories)._id,
