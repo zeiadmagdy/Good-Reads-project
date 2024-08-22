@@ -3,10 +3,10 @@ const Joi = require("joi");
 
 const Bookschema = new mongoose.Schema(
     {
-        _id: {
-            type: String,
-            required: true
-        },
+        // _id: {
+        //     type: String,
+        //     required: true
+        // },
         title: {
             type: String,
             required: true,
@@ -47,6 +47,7 @@ const Book = mongoose.model("Book", Bookschema);
 // Validate create book
 function validateBook(obj) {
     const schema = Joi.object({
+        
         title: Joi.string().trim().min(3).max(200).required(),
         author: Joi.string().required(),
         description: Joi.string().trim().min(5).required(),

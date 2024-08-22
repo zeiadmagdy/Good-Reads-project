@@ -2,6 +2,8 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const connectToDb = require("./config/db");
+
+
 //connect to db
 connectToDb();
 
@@ -10,9 +12,9 @@ const app = express();
 
 //apply Middleware
 app.use(express.json());
+app.use(cors());
 
 //Routers
-app.use(cors());
 app.use("/api/books", require("./routers/books"));
 app.use("/api/authors", require("./routers/authors"));
 app.use("/api/categories", require("./routers/categories"));

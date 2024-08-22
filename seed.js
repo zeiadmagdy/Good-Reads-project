@@ -4,8 +4,10 @@ const { Author } = require('./models/Author');
 const { Category } = require('./models/Category');
 const { Book } = require('./models/Book');
 
-mongoose.connect("mongodb://localhost/bookStoreDB")
+const MONGO_URI = 'mongodb+srv://zeiadmagdy2019:zeiadmagdy1@cluster0.orqcs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+mongoose.connect(MONGO_URI)
     .then(async () => {
+
         console.log('Database connected');
 
         const authors = Array.from({ length: 15 }).map(() => ({
@@ -15,18 +17,18 @@ mongoose.connect("mongodb://localhost/bookStoreDB")
             image: faker.image.avatar(),
         }));
 
-        const insertedAuthors = await Author.insertMany(authors);
+        const insertedAuthors = await Author.insertMany(authors, { ordered: false });
 
-        const categories = Array.from({ length: 5 }).map(() => ({
+        const categories = Array.from({ length: 6 }).map(() => ({
             name: faker.commerce.department(),
             description: faker.lorem.sentence(),
         }));
 
-        const insertedCategories = await Category.insertMany(categories);
+        const insertedCategories = await Category.insertMany(categories, { ordered: false });
 
 
         const books = Array.from({ length: 30 }).map(() => ({
-            
+
             title: faker.commerce.productName(),
             author: faker.helpers.arrayElement(insertedAuthors)._id,
             Category: faker.helpers.arrayElement(insertedCategories)._id,
@@ -37,7 +39,7 @@ mongoose.connect("mongodb://localhost/bookStoreDB")
             image: faker.image.imageUrl(200, 300, 'books', true),
         }));
 
-        await Book.insertMany(books);
+        await Book.insertMany(books, { ordered: false });
 
         console.log('Data seeded successfully');
         mongoose.connection.close();
@@ -45,3 +47,4 @@ mongoose.connect("mongodb://localhost/bookStoreDB")
     .catch(err => {
         console.error('Error seeding data:', err);
     });
+

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const { User, validateRegisterUser, validateLoginUser } = require("../models/User");
 
 /** 
@@ -21,23 +21,21 @@ router.post("/register", asyncHandler(async (req, res) => {
     if (user) {
         return res.status(400).json({ message: "User already registered" });
     }
-
-    const salt = await bcrypt.genSalt(10);
-
-    // const token = null;
-    req.body.password = await bcrypt.hash(req.body.password, salt);
-
-
     user = new User({
+
         email: req.body.email,
         username: req.body.username,
         password: req.body.password,
         role: req.body.role,
     });
+    const salt = await bcrypt.genSalt(10);
 
+    user.password = await bcrypt.hash(user.password, salt);
+
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY);
 
     const result = await user.save();
-    res.status(201).json(result);
+    res.status(201).json({ token: token, user: result });
 }));
 
 
@@ -63,8 +61,8 @@ router.post("/login", asyncHandler(async (req, res) => {
     if (!isPasswordMatch) {
         return res.status(400).json({ message: "Invalid password " });
     }
-    // const token = null;
-    res.status(200).json(user);
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY);
+    res.status(200).json({ token: token, user: user });
 }));
 
 
