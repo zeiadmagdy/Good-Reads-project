@@ -24,9 +24,11 @@ router.post("/register", asyncHandler(async (req, res) => {
     user = new User({
 
         email: req.body.email,
-        username: req.body.username,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         password: req.body.password,
         role: req.body.role,
+        image: req.body.image
     });
     const salt = await bcrypt.genSalt(10);
 
@@ -64,6 +66,28 @@ router.post("/login", asyncHandler(async (req, res) => {
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY);
     res.status(200).json({ token: token, user: user });
 }));
+
+
+/** 
+@desc: get user by id 
+@route /api/auth/:id
+@method GET
+@access public
+
+*/
+router.get(
+    "/:id",
+    asyncHandler(async (req, res) => {
+        const user = await User.findById(req.params.id);
+        if (user) {
+            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY);
+            res.status(200).json({ token: token, user: user });
+        } else {
+            res.status(404).json({ message: "User not found" });
+        }
+    })
+);
+
 
 
 

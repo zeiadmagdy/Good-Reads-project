@@ -31,11 +31,11 @@ const Bookschema = new mongoose.Schema(
         },
         rating: {
             type: Number,
-            required: true,
+            
         },
 
         reviews: [{ type: String, ref: "reviews" }],
-        price: { type: Number, required: true, min: 0 },
+        price: { type: Number, min: 0 },
         image: { type: String, default: "default-image.png" },
     },
     { timeStamps: true }
@@ -51,7 +51,7 @@ function validateBook(obj) {
         title: Joi.string().trim().min(3).max(200).required(),
         author: Joi.string().required(),
         description: Joi.string().trim().min(5).required(),
-        price: Joi.number().min(0).required(),
+        price: Joi.number().min(0),
         category: Joi.string().required(),
         image: Joi.string(),
         reviews: Joi.string(),

@@ -16,11 +16,19 @@ const userSchema = new mongoose.Schema({
             "Please fill a valid email address",
         ],
     },
-    username: {
+    firstName: {
         type: String,
         required: [true, "Username is required"],
         trim: true,
-        unique: true,
+        // unique: true,
+        minlength: [2, "Username must be at least 2 characters long"],
+        maxlength: 100,
+    },
+    lastName: {
+        type: String,
+        required: [true, "Username is required"],
+        trim: true,
+        // unique: true,
         minlength: [2, "Username must be at least 2 characters long"],
         maxlength: 100,
     },
@@ -38,6 +46,8 @@ const userSchema = new mongoose.Schema({
         },
         default: "user",
     },
+    image: { type: String, default: "default-image.png" },
+
 });
 
 // Create the User model using the schema
@@ -46,9 +56,11 @@ const User = mongoose.model("User", userSchema);
 function validateRegisterUser(obj) {
     const schema = Joi.object({
         email: Joi.string().trim().min(5).max(100).required(),
-        username: Joi.string().trim().min(2).max(100).required(),
+        firstName: Joi.string().trim().min(2).max(100).required(),
+        lastName: Joi.string().trim().min(2).max(100).required(),
         password: Joi.string().trim().min(6).max(100).required(),
         role: Joi.string().trim().valid("admin", "user"),
+        image: Joi.string(),
     });
     return schema.validate(obj);
 }

@@ -14,7 +14,7 @@ const { Author, validateAuthor, validateUpdateAuthor } = require("../models/Auth
 */
 router.get("/", asyncHandler(async (req, res) => {
     const { pageNumber } = req.query;
-    const authorsPerPage = 5;
+    const authorsPerPage = 15;
 
     const authorList = await Author.find()
         .skip((pageNumber - 1) * authorsPerPage)
