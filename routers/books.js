@@ -7,15 +7,11 @@ const { getAllBooks, getBookById, createBook, updatedBook, deleteBook } = requir
 
 router.get("/", getAllBooks);
 
-
 router.get("/:id", getBookById);
-
 
 router.post("/", createBook);
 
-
 router.put("/:id", updatedBook);
-
 
 router.delete("/:id", deleteBook);
 
